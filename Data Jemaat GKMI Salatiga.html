@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <style>
+      body {
+        background-image: url('https://images.pexels.com/photos/5226070/pexels-photo-5226070.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+      }
+      .form-container {
+        background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+        padding: 20px;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero is-primary is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">Data Jemaat GKMI Salatiga</h1>
+        </div>
+      </div>
+    </section>
+    <div class="container form-container m-4 pl-4">
+      <form id="form" method="POST">
+        <div class="field">
+          <label class="label">Nama</label>
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              placeholder="Nama Jemaat"
+              name="Nama Jemaat"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Alamat</label>
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              placeholder="Alamat"
+              name="Alamat"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Rayon</label>
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              placeholder="Rayon"
+              name="Rayon"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">No HP</label>
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              placeholder="No Hp"
+              name="No Hp"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Usia</label>
+          <div class="control">
+            <input
+              class="input"
+              type="number"
+              placeholder="Usia"
+              name="Usia"
+            />
+          </div>
+        </div>
+        
+        <div class="field">
+          <label class="label">Jenis Kelamin</label>
+          <div class="control">
+            <label class="radio">
+              <input type="radio" name="Jenis Kelamin" value="Laki-laki" /> Laki-laki
+            </label>
+            <label class="radio">
+              <input type="radio" name="Jenis Kelamin" value="Perempuan" /> Perempuan
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Golongan Darah</label>
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              placeholder="Golongan Darah"
+              name="Golongan Darah"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Informasi Tambahan</label>
+          <div class="control">
+            <textarea
+              class="textarea"
+              placeholder="Informasi Tambahan"
+              name="Informasi Tambahan"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-primary" type="submit" id="submit-button">
+              Submit
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div
+      id="message"
+      style="
+        display: none;
+        margin: 20px;
+        font-weight: bold;
+        color: green;
+        padding: 8px;
+        background-color: beige;
+        border-radius: 4px;
+        border-color: aquamarine;
+      "
+    ></div>
+
+    <script>
+      document.getElementById("form").addEventListener("submit", function (e) {
+        e.preventDefault(); // Prevent the default form submission
+        document.getElementById("message").textContent = "Submitting..";
+        document.getElementById("message").style.display = "block";
+        document.getElementById("submit-button").disabled = true;
+
+        // Collect the form data
+        var formData = new FormData(this);
+        var keyValuePairs = [];
+        for (var pair of formData.entries()) {
+          keyValuePairs.push(pair[0] + "=" + pair[1]);
+        }
+
+        var formDataString = keyValuePairs.join("&");
+
+        // Send a POST request to your Google Apps Script
+        fetch(
+          "https://script.google.com/macros/s/AKfycbyq5MAP9It5uqmo858wv43zqJj_fLYSamIOfyqPyPqRpm7OGqCcsZ66q0zzg1rXgn88/exec",
+          {
+            redirect: "follow",
+            method: "POST",
+            body: formDataString,
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8",
+            },
+          }
+        )
+          .then(function (response) {
+            // Check if the request was successful
+            if (response) {
+              return response; // Assuming your script returns JSON response
+            } else {
+              throw new Error("Failed to submit the form.");
+            }
+          })
+          .then(function (data) {
+            // Display a success message
+            document.getElementById("message").textContent =
+              "Data submitted successfully!";
+            document.getElementById("message").style.display = "block";
+            document.getElementById("message").style.backgroundColor = "green";
+            document.getElementById("message").style.color = "beige";
+            document.getElementById("submit-button").disabled = false;
+            document.getElementById("form").reset();
+
+            setTimeout(function () {
+              document.getElementById("message").textContent = "";
+              document.getElementById("message").style.display = "none";
+            }, 2600);
+          })
+          .catch(function (error) {
+            // Handle errors, you can display an error message here
+            console.error(error);
+            document.getElementById("message").textContent =
+              "An error occurred while submitting the form.";
+            document.getElementById("message").style.display = "block";
+          });
+      });
+    </script>
+  </body>
+</html>
